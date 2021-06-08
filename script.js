@@ -60,7 +60,9 @@ function filterHandler(e) {
 let addBtn = document.querySelector(".add");
 let deleteBtn = document.querySelector(".delete");
 
-deleteBtn.addEventListener("click", function (e) {
+deleteBtn.addEventListener("click", removeTicket);
+
+function removeTicket(e) {
     let selectedTickets = document.querySelectorAll(".ticket.active");
     let allTasks = JSON.parse(localStorage.getItem("allTasks"));
 
@@ -73,7 +75,7 @@ deleteBtn.addEventListener("click", function (e) {
     }
 
     localStorage.setItem("allTasks", JSON.stringify(allTasks));
-});
+}
 
 addBtn.addEventListener("click", showModal);
 
@@ -81,17 +83,22 @@ let selectedPriority;
 
 function showModal(e) {
     if (!modalVisible) {
-        let modal = document.createElement("div");
-        modal.classList.add("modal");
-        modal.innerHTML =
-            `<div class="task-to-be-added" data-typed = "false" contenteditable = "true">Enter you task here</div>
+        let biggerModal = document.createElement("div");
+        biggerModal.classList.add("bigger-modal");
+        biggerModal.innerHTML =
+            `<div class="modal">
+            <div class="close">
+                <img src="https://img.icons8.com/ios-glyphs/27/000000/macos-close.png"/>
+            </div>
+            <div class="task-to-be-added" data-typed = "false" contenteditable = "true">Enter you task here</div>
             <div class="modal-priority-list">
                 <div class="modal-pink-filter modal-filter active"></div>
                 <div class="modal-blue-filter modal-filter"></div>
                 <div class="modal-green-filter modal-filter"></div>
                 <div class="modal-yellow-filter modal-filter"></div>
+            </div>
             </div>`;
-        TC.append(modal);
+        TC.append(biggerModal);
 
         // let modal = `<div class="modal">
         //     <div class="task-to-be-added" data-typed = "false" contenteditable>Enter you task here</div>
@@ -121,6 +128,10 @@ function showModal(e) {
             modalFilter[i].addEventListener("click", selectPriority.bind(this, taskModal));
         }
 
+        document.querySelector(".close").addEventListener("click", function(){
+            biggerModal.remove();
+            modalVisible = false;
+        })
     }
 }
 
@@ -184,10 +195,55 @@ function addTicket(taskModal, e) {
         alert("Error! you have not typed anything in task.");
     }
 
-
-
-
 }
+
+let info;
+$(".info-btn").mouseover(function(){
+    info=$(`<div class="info">
+    <h2><u>Features:</u></h2>
+	<ul>
+		<li><b>Add Tasks:</b>Tasks can be added with the Add-button. Click '+' Icon.</li>
+		<br />
+		<li><b>Delete Tasks:</b>Tasks can be deleted with the delete-button. Click '-' Icon.</li>
+		<br />
+		<li>
+			<b>Delete All Tasks:</b> Click Button present in the top
+			right corner.
+		</li>
+		<br />
+		<li><b>View All Tasks:</b> Double click any color in the Toolbar.</li>
+		<br />
+		<li>
+			<b>View Color specific Tasks:</b> Click that specific
+			color in the Toolbar.
+		</li>
+		<br />		
+		<li>
+			<b>Setting Color of a Task:</b>
+			After pressing '+' Icon, Enter description, then select the color for your task from the color palette.
+		</li>
+		<br />
+        <li>
+			<b>Each task is gnerated with a unique ID</b>
+		</li>	
+		<p>
+			<b><i>*Don't worry! Your data will be stored for the next time you visit..</b>
+		<i></i></p>
+	</ul>
+    </div>`)
+    $(".ticket-container").append(info);
+});
+$(".info-btn").mouseout(function(){
+  info.remove();
+})
+
+$(".deleteTicket").click(function(e){
+    let ticketDelete = $(".ticket");
+    for(let i = 0; i < ticketDelete.length; i++){
+        $(ticketDelete[i]).addClass("active");
+    }
+    removeTicket();
+});
 
 // function filterHandler(e) {
 //     let span = e.currentTarget.children[0];
