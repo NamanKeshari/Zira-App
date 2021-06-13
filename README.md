@@ -18,7 +18,6 @@ Functionalities -
 7. All tasks are stored on the local storage of the browser and are added and deleted in real time. 
 
 
-
 Uses-
 
 1. Developers can use this app to divide the tasks amongst the team and see real-time progress. 
